@@ -7,13 +7,10 @@ import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import com.kuma.jaidefinichon.data.database.entity.PostEntity
 
-/**
- * Created by Jorge.Enciso on 25/07/2017.
- */
 @Dao interface PostDao {
 
-  @Query("SELECT * FROM posts ORDER BY id DESC") fun loadAllPosts(): LiveData<List<PostEntity>>
+    @Query("SELECT * FROM posts ORDER BY id DESC") fun loadAllPosts(): LiveData<List<PostEntity>>
 
-  @Insert(onConflict = OnConflictStrategy.REPLACE) fun insertAll(posts: List<PostEntity>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE) fun insertAll(posts: List<PostEntity>)
 
 }

@@ -8,29 +8,30 @@ import android.arch.lifecycle.Transformations
 import com.kuma.jaidefinichon.data.database.DatabaseCreator
 import com.kuma.jaidefinichon.data.database.entity.PostEntity
 
-/**
- * Created by Jorge.Enciso on 25/07/2017.
- */
 class MainActivityVM(app: Application) : AndroidViewModel(app) {
-  val mObservablePosts: LiveData<List<PostEntity>>
 
-  init{
-    val databaseCreated = DatabaseCreator.isDatabaseCreated()
+    val mObservablePosts: LiveData<List<PostEntity>>
 
-    initAbsentValues()
-    mObservablePosts = Transformations.switchMap<Boolean, List<PostEntity>>(databaseCreated){
-      isDbCreated ->
-      if(!isDbCreated) ABSENTPOST
-      else DatabaseCreator.getDatabase().postDao().loadAllPosts()
+    init {
+        val databaseCreated = DatabaseCreator.isDatabaseCreated()
+
+        initAbsentValues()
+
+        mObservablePosts = Transformations.switchMap<Boolean, List<PostEntity>>(databaseCreated) {
+            isDbCreated ->
+            if (!isDbCreated)
+                ABSENT_POST
+            else
+                DatabaseCreator.getDatabase().postDao().loadAllPosts()
+        }
     }
-  }
 
-  private fun initAbsentValues(){
-    ABSENTPOST.value = null
-  }
+    private fun initAbsentValues() {
+        ABSENT_POST.value = null
+    }
 
-  companion object {
-    private val ABSENTPOST: MutableLiveData<List<PostEntity>> = MutableLiveData()
-  }
+    companion object {
+        private val ABSENT_POST: MutableLiveData<List<PostEntity>> = MutableLiveData()
+    }
 
 }
